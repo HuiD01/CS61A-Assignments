@@ -11,9 +11,13 @@ def shuffle(s):
     >>> letters  # Original list should not be modified
     ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
     """
+    ## a = [1,2,3,4,5,6].  [].append(a[i]) /n [].append(a[i+len(s)/2])
     assert len(s) % 2 == 0, 'len(seq) must be even'
-    "*** YOUR CODE HERE ***"
-
+    result = []
+    for i in range(len(s) // 2):
+        result.append(s[i])
+        result.append(s[i+len(s)//2])
+    return result
 
 def deep_map(f, s):
     """Replace all non-list elements x with f(x) in the nested list s.
@@ -37,7 +41,11 @@ def deep_map(f, s):
     >>> s3 is s2[1]
     True
     """
-    "*** YOUR CODE HERE ***"
+    for i in range(len(s)):
+        if type(s[i]) == list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i]) 
 
 
 HW_SOURCE_FILE=__file__
@@ -46,12 +54,12 @@ HW_SOURCE_FILE=__file__
 def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
-    "*** YOUR CODE HERE ***"
+    return ['planet', mass]
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
-    "*** YOUR CODE HERE ***"
+    return p[1]
 
 def is_planet(p):
     """Whether p is a planet."""
@@ -103,9 +111,15 @@ def balanced(m):
     >>> check(HW_SOURCE_FILE, 'balanced', ['Index'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
-
+    if is_planet(m):
+        return True
+    else:
+        left_torque = length(left(m)) * total_mass(end(left(m)))
+        right_torque = length(right(m)) * total_mass(end(right(m)))
+        return (left_torque == right_torque
+                and balanced(end(left(m)))
+                and balanced(end(right(m))))
+  
 def berry_finder(t):
     """Returns True if t contains a node with the value 'berry' and 
     False otherwise.
@@ -123,7 +137,12 @@ def berry_finder(t):
     >>> berry_finder(t)
     True
     """
-    "*** YOUR CODE HERE ***"
+    if label(t) == 'berry':
+        return True
+    for branch in branches(t):
+        if berry_finder(branch):
+            return True
+    return False
 
 
 HW_SOURCE_FILE=__file__
@@ -138,8 +157,11 @@ def max_path_sum(t):
     >>> max_path_sum(t2) # 5, 2, 10
     17
     """
-    "*** YOUR CODE HERE ***"
-
+    if is_leaf(t):
+        return label(t)
+    else:
+        return label(t) + max(max_path_sum(branch) for branch in branches(t))
+            
 
 def mobile(left, right):
     """Construct a mobile from a left arm and a right arm."""
@@ -179,7 +201,6 @@ def end(s):
     """Select the mobile or planet hanging at the end of an arm."""
     assert is_arm(s), "must call end on an arm"
     return s[2]
-
 
 
 # Tree Data Abstraction

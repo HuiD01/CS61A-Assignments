@@ -26,7 +26,15 @@ def insert_items(s, before, after):
     >>> large_s3 is large_s
     True
     """
-    "*** YOUR CODE HERE ***"
+    result = []
+    for item in s:
+        result.append(item)
+        if item == before:
+            result.append(after)
+    s.clear()
+    s.extend(result)
+    return s
+
 
 
 def group_by(s, fn):
@@ -40,12 +48,12 @@ def group_by(s, fn):
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
     grouped = {}
-    for ____ in ____:
-        key = ____
+    for item in s:
+        key = fn(item)
         if key in grouped:
-            ____
+            grouped[key].append(item)
         else:
-            grouped[key] = ____
+            grouped[key] = [item]
     return grouped
 
 
@@ -70,7 +78,17 @@ def count_occurrences(t, n, x):
     >>> count_occurrences(v, 6, 6)
     2
     """
-    "*** YOUR CODE HERE ***"
+    count = 0
+    result = 0
+    while count != n:
+        next_int = next(t)
+        if next_int == x:
+            result += 1
+        count += 1
+    return result
+
+
+
 
 
 def repeated(t, k):
@@ -93,7 +111,15 @@ def repeated(t, k):
     2
     """
     assert k > 1
-    "*** YOUR CODE HERE ***"
+    window = []
+
+    for value in t:
+        window.append(value)
+        if len(window) > k:
+            window.pop(0)
+        if len(window) == k and all(item == value for item in window):
+            return value
+
 
 
 def sprout_leaves(t, leaves):
@@ -129,7 +155,10 @@ def sprout_leaves(t, leaves):
           1
           2
     """
-    "*** YOUR CODE HERE ***"
+    if is_leaf(t):
+        return tree(label(t), [tree(leaf) for leaf in leaves])
+    else:
+        return tree(label(t), [sprout_leaves(branch, leaves) for branch in branches(t)])
 
 
 def partial_reverse(s, start):
@@ -144,7 +173,12 @@ def partial_reverse(s, start):
     >>> a
     [1, 2, 7, 6, 5, 3, 4]
     """
-    "*** YOUR CODE HERE ***"
+    left = start
+    right = len(s) - 1
+    while left < right:
+        s[left], s[right] = s[right], s[left]
+        left += 1
+        right -= 1
 
 
 

@@ -24,7 +24,12 @@ def num_eights(n):
     ...       ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+    elif n % 10 == 8:
+        return 1 + num_eights(n // 10)
+    else:
+        return num_eights(n // 10)
 
 
 def digit_distance(n):
@@ -46,8 +51,10 @@ def digit_distance(n):
     ...       ['For', 'While'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    if n < 0:
+        return 0
+    else:
+        return abs(n % 10 - (n // 10) % 10 ) + digit_distance((n // 10))
 
 def interleaved_sum(n, odd_func, even_func):
     """Compute the sum odd_func(1) + even_func(2) + odd_func(3) + ..., up
@@ -70,8 +77,15 @@ def interleaved_sum(n, odd_func, even_func):
     >>> check(HW_SOURCE_FILE, 'interleaved_sum', ['BitAnd', 'BitOr', 'BitXor']) # ban bitwise operators, don't worry about these if you don't know what they are
     True
     """
-    "*** YOUR CODE HERE ***"
+    ##思路是先从1开始，一路加到n这个数。所以一定是从奇数的函数开始加。
+    def helper(i, f, g):
+        if i > n:
+            return 0
+        else:
+            return f(i) + helper(i+1, g, f)
 
+    return helper(1, odd_func, even_func)
+        
 
 def next_smaller_dollar(bill):
     """Returns the next smaller bill in order."""
@@ -106,7 +120,17 @@ def count_dollars(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(remaining, bill):
+        if remaining == 0:
+            return 1
+        elif remaining < 0:
+            return 0
+        elif bill == 1:##面额只有1单独讨论
+            return 1
+        else:
+            return helper(remaining - bill, bill) + helper(remaining, next_smaller_dollar(bill))
+
+    return helper(total, 100)
 
 
 def next_larger_dollar(bill):
@@ -142,7 +166,17 @@ def count_dollars_upward(total):
     >>> check(HW_SOURCE_FILE, 'count_dollars_upward', ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    def helper(remaining, bill):
+        if remaining == 0:
+            return 1
+        elif remaining < 0:
+            return 0
+        elif bill is None:
+            return 0
+        else:
+            return helper(remaining - bill, bill) + helper(remaining, next_larger_dollar(bill))
+
+    return helper(total, 1)
 
 
 def print_move(origin, destination):
@@ -194,4 +228,11 @@ def make_anonymous_factorial():
     True
     """
     return 'YOUR_EXPRESSION_HERE'
+
+
+
+
+
+
+
 
